@@ -236,7 +236,7 @@ module.exports = grammar({
       $.literal_type
     )),
 
-    _array_suffix: $ => '[]',
+    _array_suffix: $ => seq('[', ']'),
 
     // Need to break recursion carefully
     array_notation: $ => prec.right(seq(
