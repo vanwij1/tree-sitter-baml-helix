@@ -853,8 +853,17 @@
       }
     },
     "_array_suffix": {
-      "type": "STRING",
-      "value": "[]"
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
     },
     "array_notation": {
       "type": "PREC_RIGHT",
