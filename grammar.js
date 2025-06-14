@@ -410,11 +410,11 @@ module.exports = grammar({
     raw_string_literal: $ => token(choice(
         // Format: optional_prefix delimiter content delimiter
         // Using non-greedy .*? for content - adjust if specific exclusion needed
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#####".*?"#####/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?####".*?"####/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?###".*?"###/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?##".*?"##/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#".*?"#/
+        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#####"[\s\S]*?"#####/,
+        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?####"[\s\S]*?"####/,
+        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?###"[\s\S]*?"###/,
+        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?##"[\s\S]*?"##/,
+        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#"[\s\S]*?"#/
     )),
 
     // Unterminated literals are typically parse errors handled by Tree-sitter
