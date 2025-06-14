@@ -407,16 +407,96 @@ module.exports = grammar({
 
     // Raw strings need careful tokenization. Using simplified regexes.
     // An external scanner is often better for complex delimited tokens.
-    raw_string_literal: $ => token(choice(
+    // raw_string_literal: $ => token(choice(
         // Format: optional_prefix delimiter content delimiter
         // Using non-greedy .*? for content - adjust if specific exclusion needed
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#####"[\s\S]*?"#####/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?####"[\s\S]*?"####/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?###"[\s\S]*?"###/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?##"[\s\S]*?"##/,
-        /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#"[\s\S]*?"#/
-    )),
+        // /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#####"[\s\S]*?"#####/,
+        // /(?:[a-zA-Z][a-zA-Z0-9_-]*)?####"[\s\S]*?"####/,
+        // /(?:[a-zA-Z][a-zA-Z0-9_-]*)?###"[\s\S]*?"###/,
+        // /(?:[a-zA-Z][a-zA-Z0-9_-]*)?##"[\s\S]*?"##/,
+        // /(?:[a-zA-Z][a-zA-Z0-9_-]*)?#"[\s\S]*?"#/
+    // )),
 
+    // raw_string_literal: $ => seq(
+    //   optional($.identifier),
+    //   alias(/#+"/, $.raw_string_delimiter),  // e.g. '#"' or '###"'
+    //   repeat(choice(
+    //     $.jinja_expression,
+    //     alias(
+    //       token.immediate(/[\s\S](?!(?:#+"))/),
+    //       $.raw_string_content
+    //     )
+    //   )),
+    //   alias(/"#+/, $.raw_string_delimiter)   // e.g. '"#' or '"###'
+    // ),
+    //d
+    //
+    //
+    raw_string_literal: $ => choice(
+      // 1-hash
+      seq(
+        alias(/#"/, $.raw_string_delimiter),
+        repeat(choice($.jinja_expression, $._raw_string_char)),
+        alias(/"#/, $.raw_string_delimiter)
+      ),
+      // 2-hash
+      seq(
+        alias(/##"/, $.raw_string_delimiter),
+        repeat(choice($.jinja_expression, $._raw_string_char)),
+        alias(/"##/, $.raw_string_delimiter)
+      ),
+      // 3-hash
+      seq(
+        alias(/###"/, $.raw_string_delimiter),
+        repeat(choice($.jinja_expression, $._raw_string_char)),
+        alias(/"###/, $.raw_string_delimiter)
+      ),
+      // 4-hash
+      seq(
+        alias(/####"/, $.raw_string_delimiter),
+        repeat(choice($.jinja_expression, $._raw_string_char)),
+        alias(/"####/, $.raw_string_delimiter)
+      ),
+    ),
+
+   // hidden helper: eats one character at a time, but no AST node
+    _raw_string_char: $ => token(/[\s\S]/),
+
+  // raw_string_literal: $ => choice(
+  //   $.raw_string_1_hash,
+  //   $.raw_string_2_hashes,
+  //   $.raw_string_3_hashes
+  // ),
+
+  // raw_string_1_hash: $ => seq(
+  //   'r#"',  // opening delimiter
+  //   repeat(choice(
+  //     $.jinja_expression,
+  //     token.immediate(/([^"]|"(?!#))+/)
+  //   )),
+  //   '"#'    // closing delimiter
+  // ),
+
+  // raw_string_2_hashes: $ => seq(
+  //   'r##"',  // opening delimiter
+  //   repeat(choice(
+  //     $.jinja_expression,
+  //     token.immediate(/([^"]|"(?!##))+/)
+  //   )),
+  //   '"##'    // closing delimiter
+  // ),
+
+  // raw_string_3_hashes: $ => seq(
+  //   'r###"',  // opening delimiter
+  //   repeat(choice(
+  //     $.jinja_expression,
+  //     token.immediate(/([^"]|"(?!###))+/)
+  //   )),
+  //   '"###'    // closing delimiter
+  // ),
+
+    
+    // 
     // Unterminated literals are typically parse errors handled by Tree-sitter
 
     // ######################################
