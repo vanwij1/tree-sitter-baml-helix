@@ -363,9 +363,10 @@ module.exports = grammar({
       // ARRAY_CATCH_ALL omitted
     ),
 
-    _jinja_block_open: $ => '{{',
-    _jinja_block_close: $ => '}}',
-    _jinja_body: $ => token(prec(-1, /.*?/)), // Very permissive, adjust regex as needed
+    _jinja_block_open: $ => prec(1,seq('{','{')),
+    _jinja_block_close: $ => prec(1,seq('}','}')),
+    // _jinja_body: $ => token(prec(-1, /.*?/)), // Very permissive, adjust regex as needed
+    _jinja_body: $ => token(prec(-1, /[^}]*([^}][^}]*?)*/)),
 
     jinja_expression: $ => seq(
         $._jinja_block_open,

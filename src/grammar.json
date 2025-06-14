@@ -1476,12 +1476,38 @@
       ]
     },
     "_jinja_block_open": {
-      "type": "STRING",
-      "value": "{{"
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "{"
+          },
+          {
+            "type": "STRING",
+            "value": "{"
+          }
+        ]
+      }
     },
     "_jinja_block_close": {
-      "type": "STRING",
-      "value": "}}"
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "}"
+          },
+          {
+            "type": "STRING",
+            "value": "}"
+          }
+        ]
+      }
     },
     "_jinja_body": {
       "type": "TOKEN",
@@ -1490,7 +1516,7 @@
         "value": -1,
         "content": {
           "type": "PATTERN",
-          "value": ".*?"
+          "value": "[^}]*([^}][^}]*?)*"
         }
       }
     },
