@@ -467,42 +467,6 @@ module.exports = grammar({
    // hidden helper: eats one character at a time, but no AST node
     _raw_string_char: $ => token(/[\s\S]/),
 
-  // raw_string_literal: $ => choice(
-  //   $.raw_string_1_hash,
-  //   $.raw_string_2_hashes,
-  //   $.raw_string_3_hashes
-  // ),
-
-  // raw_string_1_hash: $ => seq(
-  //   'r#"',  // opening delimiter
-  //   repeat(choice(
-  //     $.jinja_expression,
-  //     token.immediate(/([^"]|"(?!#))+/)
-  //   )),
-  //   '"#'    // closing delimiter
-  // ),
-
-  // raw_string_2_hashes: $ => seq(
-  //   'r##"',  // opening delimiter
-  //   repeat(choice(
-  //     $.jinja_expression,
-  //     token.immediate(/([^"]|"(?!##))+/)
-  //   )),
-  //   '"##'    // closing delimiter
-  // ),
-
-  // raw_string_3_hashes: $ => seq(
-  //   'r###"',  // opening delimiter
-  //   repeat(choice(
-  //     $.jinja_expression,
-  //     token.immediate(/([^"]|"(?!###))+/)
-  //   )),
-  //   '"###'    // closing delimiter
-  // ),
-
-    
-    // 
-    // Unterminated literals are typically parse errors handled by Tree-sitter
 
     // ######################################
     // Comments (defined as tokens for extras)
