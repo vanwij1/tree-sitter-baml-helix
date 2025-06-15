@@ -544,6 +544,21 @@
     }
   },
   {
+    "type": "generic_type_params",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "group_type",
     "named": true,
     "fields": {},
@@ -673,7 +688,7 @@
       },
       "value": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "_expression",
@@ -1065,7 +1080,7 @@
       },
       "type": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "field_type_chain",
@@ -1266,6 +1281,16 @@
             "named": true
           }
         ]
+      },
+      "type_params": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_type_params",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -1376,10 +1401,6 @@
   },
   {
     "type": "client",
-    "named": false
-  },
-  {
-    "type": "client<llm>",
     "named": false
   },
   {

@@ -85,7 +85,7 @@ module.exports = grammar({
 
     type_expression: $ => prec.left(seq(
       field('name', $.identifier),
-      field('type', optional($.field_type_chain)),
+      field('type', $.field_type_chain),
       // Optional newline/attributes/comments handled by structure/extras
       repeat(choice($.field_attribute, $.trailing_comment)), // Simplified PEST's nested optional/repeat
     )),
@@ -111,8 +111,11 @@ module.exports = grammar({
       $._GENERATOR_KEYWORD
     ),
 
+    generic_type_params: $ => seq('<', sepBy1($._COMMA, $.identifier), '>'),
+
     value_expression_block: $ => seq(
       field('keyword', $.value_expression_keyword),
+      field('type_params', optional($.generic_type_params)),
       field('name', $.identifier),
       field('args', optional($.named_argument_list)),
       field('return_type', optional(seq($._ARROW, $.field_type_chain))),
@@ -337,18 +340,20 @@ module.exports = grammar({
     map_entry: $ => seq(
       // comment_block / empty_lines handled by extras
       field('key', $.map_key),
-      optional(field('value', $._expression)), // PEST has (expression | ENTRY_CATCH_ALL)?
+      field('value', $._expression), // PEST has (expression | ENTRY_CATCH_ALL)?
       optional($.trailing_comment)
       // ENTRY_CATCH_ALL omitted
     ),
 
     // Define splitter explicitly if newlines are significant separators here
     _splitter: $ => choice(seq($._COMMA /* optional($._NEWLINE) */), $._NEWLINE), // Using token for newline
+    //_splitter: $ => choice($._COMMA, $._NEWLINE),
 
     map_expression: $ => seq(
       '{',
       // empty_lines handled by extras
-      optional(sepBy($._splitter, $.map_entry)), // Uses explicit splitter
+      //optional(sepBy($._COMMA, $.map_entry)), // Uses explicit splitter
+      repeat($.map_entry),
       // comment_block / empty_lines handled by extras
       '}'
     ),
@@ -536,7 +541,7 @@ module.exports = grammar({
     _TYPE_BUILDER_KEYWORD: $ => 'type_builder',
     // PEST client<llm> is tricky. If '<llm>' is optional or fixed, adjust.
     // Assuming fixed for now or just 'client'. Requires clarification.
-    _CLIENT_KEYWORD: $ => choice('client<llm>', 'client'),
+    _CLIENT_KEYWORD: $ => 'client',
     _GENERATOR_KEYWORD: $ => 'generator',
     _RETRY_POLICY_KEYWORD: $ => 'retry_policy',
 
